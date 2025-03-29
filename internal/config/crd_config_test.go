@@ -229,3 +229,25 @@ func TestInitializeDefaultConfig(t *testing.T) {
 		t.Errorf("InitializeDefaultConfig() error on second call = %v", err)
 	}
 }
+
+func TestK8sPublishingSubject(t *testing.T) {
+	// Verify the K8s subject constant is set correctly
+	if K8sPublishingSubject != "meshery.meshsync.k8s" {
+		t.Errorf("K8sPublishingSubject has unexpected value: %s", K8sPublishingSubject)
+	}
+	
+	// Check that Kubernetes resources are configured to use the K8s subject
+	for _, config := range Pipelines[GlobalResourceKey] {
+		if config.PublishTo != K8sPublishingSubject {
+			t.Errorf("Resource %s is not configured to use K8sPublishingSubject. Using: %s", 
+				config.Name, config.PublishTo)
+		}
+	}
+	
+	for _, config := range Pipelines[LocalResourceKey] {
+		if config.PublishTo != K8sPublishingSubject {
+			t.Errorf("Resource %s is not configured to use K8sPublishingSubject. Using: %s", 
+				config.Name, config.PublishTo)
+		}
+	}
+}

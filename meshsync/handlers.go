@@ -1,9 +1,9 @@
 package meshsync
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
-	"encoding/json"
 
 	"github.com/layer5io/meshkit/broker"
 	"github.com/layer5io/meshkit/utils"
@@ -221,7 +221,7 @@ func (h *Handler) WatchCRDs() {
 			// Any subsequent updates will have event type as "modified"
 			updatedPipelineConfigs = existingPipelineConfigs.Add(config.PipelineConfig{
 				Name:      configName,
-				PublishTo: config.DefaultPublishingSubject,
+				PublishTo: config.K8sPublishingSubject,
 				Events:    []string{"ADDED", "MODIFIED", "DELETED"},
 			})
 		case watch.Deleted:
